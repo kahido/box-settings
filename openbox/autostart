@@ -1,0 +1,11 @@
+#!/bin/dash
+export PATH="${PATH}:$HOME/.scripts"
+xrdb $HOME/.Xresources
+xset +fp $HOME/.fonts/misc/
+#compton -b
+#xbacklight -set 10
+#hsetroot -center $HOME/.wallpaper.jpg
+#xsettingsd &
+conky | lemonbar -g x28 \
+-f -*-rissole-* -f -*-waffle-* \
+-B "#141c21" -F "#93a1a1" &
