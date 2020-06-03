@@ -16,7 +16,7 @@
       </action>
     </item>
     <separator />
-    <!--<menu execute="openbox-menu lxde-applications.menu" id="apps" label="Applications"/>-->
+    <menu execute="openbox-menu lxde-applications.menu" id="apps" label="Applications"/>
     <menu id="client-list-menu" />
     <separator />
     <item label="Configurations">
