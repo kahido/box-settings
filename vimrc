@@ -12,7 +12,7 @@ let mapleader = " "
 
 "{{ Load plugin manager
 
-if !filereadable(expand('~/.config/nvim/autoload/plug.vim'))
+if !filereadable(expand('$HOME/.config/nvim/autoload/plug.vim'))
     let s:first_init=1
 endif
 
@@ -23,7 +23,7 @@ if exists("s:first_init")
     echom 'Installed successfully!'
 endif
 
-call plug#begin('~/.config/nvim/plugged')
+call plug#begin('$HOME/.config/nvim/plugged')
 
 "}}
 
@@ -181,14 +181,13 @@ set splitbelow
 "" Keep undo history across sessions by storing it in a file
 
 if has('persistent_undo')
-  let vim_dir = '$HOME/.vim'
+  let vim_dir = '$HOME/.config/nvim'
   "let &runtimepath.=','.vim_dir
   let undo_dir = expand(vim_dir.'/undo')
   call system('mkdir ' . vim_dir)
   call system('mkdir ' . undo_dir)
   let &undodir = undo_dir
   set undofile
-  set undodir=~/.vim/undo
   set undolevels=1000
   set undoreload=10000
 endif
