@@ -56,8 +56,8 @@ set fish_pager_color_prefix cyan
 set fish_pager_color_progress cyan
 
 ## Aliases
-alias ls "ls --group-directories-first"
-alias lsl "ls --group-directories-first -lh"
+alias ls "ls --group-directories-first --color=auto"
+alias lsl "ls --group-directories-first -lh --color=auto"
 alias search "apt-cache search"
 alias install "sudo apt-get install --no-install-recommends"
 alias upgrade "sudo apt-get upgrade"
@@ -73,9 +73,13 @@ alias pkglist "dpkg --get-selections | grep -v deinstall | sed s/\tinstall//g"
 alias version "apt-cache policy"
 alias font-refresh "fc-cache -fv"
 alias urxvt-refresh "xrdb ~/.Xresources"
-alias gclone "git clone"
-alias gstatus "git status"
-alias gfetch "git fetch --prune --all"
+alias gc "git clone"
+alias gs "git status"
+alias gd "git diff"
+alias gl "git log"
+alias gf "git fetch --prune --all"
+alias gb "git branch --verbose"
+alias gba "git branch --verbose --all"
 
 ## Keybinding
 set fish_key_bindings fish_default_key_bindings
