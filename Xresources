@@ -38,10 +38,10 @@
 *.color15: #fdf6e3
 
 !! URxvt Appearance
-URxvt.font: -*-castella-*
-URxvt.boldFont: -*-castella-*
-URxvt.italicFont: -*-castella-*
-URxvt.boldItalicfont: -*-castella-*
+!URxvt.font: -*-castella-*
+!URxvt.boldFont: -*-castella-*
+!URxvt.italicFont: -*-castella-*
+!URxvt.boldItalicfont: -*-castella-*
 URxvt.letterSpace: 0
 URxvt.lineSpace: 0
 URxvt.geometry: 92x24

@@ -12,18 +12,21 @@ let mapleader = " "
 
 "{{ Load plugin manager
 
-if !filereadable(expand('$HOME/.config/nvim/autoload/plug.vim'))
+"if !filereadable(expand('$HOME/.config/nvim/autoload/plug.vim'))
+if !filereadable(expand('$HOME/.vim/autoload/plug.vim'))
     let s:first_init=1
 endif
 
 if exists("s:first_init")
     echom 'Plugin manager: vim-plug not been installed. Attempting installation...'
-    exec 'silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs '.
+    "exec 'silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs '.
+    "        \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    exec 'silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs '.
             \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     echom 'Installed successfully!'
 endif
 
-call plug#begin('$HOME/.config/nvim/plugged')
+call plug#begin('$HOME/.vim/plugged')
 
 "}}
 
@@ -34,11 +37,47 @@ call plug#begin('$HOME/.config/nvim/plugged')
 "{{ Colorschemes and views
 
 " Load colorscheme
-Plug 'arcticicestudio/nord-vim'
+
+" ingo-library (needed for mark)
+Plug 'inkarkat/vim-ingo-library'
+
+" Mark
+Plug 'inkarkat/vim-mark'
+
+" remap colors --
+fun! s:CustomHighlightings()
+    highlight def MarkWord1  ctermbg=230    ctermfg=Black   guibg=#70227E   guifg=Black
+    highlight def MarkWord2  ctermbg=167    ctermfg=Black   guibg=#FF7373   guifg=Black
+    highlight def MarkWord3  ctermbg=2      ctermfg=Black   guibg=#A60000   guifg=Black
+    highlight def MarkWord4  ctermbg=6      ctermfg=Black   guibg=#FFB3FF   guifg=Black
+    highlight def MarkWord5  ctermbg=156    ctermfg=Black   guibg=#C262D3   guifg=Black
+    highlight def MarkWord6  ctermbg=202    ctermfg=Black   guibg=#FF5F00   guifg=Black
+    highlight def MarkWord7  ctermbg=90     ctermfg=Black   guibg=#870087   guifg=Black
+    highlight def MarkWord8  ctermbg=27     ctermfg=Black   guibg=#005FFF   guifg=Black
+"    highlight def MarkWord10 ctermbg=101    ctermfg=Black   guibg=#8C38D3   guifg=Black
+"    highlight def MarkWord1  ctermbg=228    ctermfg=Black   guibg=#BF3030   guifg=Black
+"    highlight def MarkWord7  ctermbg=180    ctermfg=Black   guibg=#5D016D   guifg=Black
+"    highlight def MarkWord8  ctermbg=164    ctermfg=Black   guibg=#8F04A8   guifg=Black
+endfun
+autocmd ColorScheme * call <SID>CustomHighlightings()
 
 "}}
 
 ""{{ Version control - Git
+
+"}}
+
+""{{ Programming tools
+
+" Clang-format
+Plug 'rhysd/vim-clang-format'
+  let g:clang_format#detect_style_file = 1
+
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>f :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>f :ClangFormat<CR>
+
+" Toggle auto formatting:
+nmap <Leader>C :ClangFormatAutoToggle<CR>
 
 "}}
 
@@ -49,8 +88,15 @@ Plug 'octol/vim-cpp-enhanced-highlight'
   let g:cpp_class_scope_highlight = 1
   let g:cpp_member_variable_highlight = 1
   let g:cpp_class_decl_highlight = 1
-  let g:cpp_experimental_template_highlight = 1
+  let g:cpp_posix_standard = 1
+  let g:cpp_experimental_simple_template_highlight = 1
+  "let g:cpp_experimental_template_highlight = 1
   let g:cpp_concepts_highlight = 1
+
+  let c_no_curly_error=1
+
+" Python
+Plug 'vim-python/python-syntax'
 
 " Json
 Plug 'elzr/vim-json'
@@ -59,9 +105,14 @@ Plug 'elzr/vim-json'
 " Yang
 Plug 'nathanalderson/yang.vim'
 
+" Log
+Plug 'mtdl9/vim-log-highlighting'
+
 "}}
 
 "{{ Navigation
+
+Plug 'embear/vim-foldsearch'
 
 "}}
 
@@ -92,7 +143,7 @@ set encoding=utf-8
 set showmatch
 set autoread
 set updatetime=300
-set mouse=a
+"set mouse=a
 
 "}}
 
@@ -105,7 +156,7 @@ set expandtab
 set smarttab
 set autoindent
 set smartindent
-set nowrap
+"set nowrap
 set bs=2
 
 "}}
@@ -115,6 +166,7 @@ set bs=2
 set incsearch
 set hlsearch
 set smartcase
+set wildmenu
 
 "}}
 
@@ -150,10 +202,10 @@ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 set conceallevel=3
 set background=dark
-colorscheme nord
+colorscheme cppcode
 set cmdheight=2
 set scrolloff=12
-let &colorcolumn=80
+let &colorcolumn=91
 if has('gui')
   :set guioptions-=m " remove menu bar
   :set guioptions-=T " remove toolbar
@@ -181,7 +233,8 @@ set splitbelow
 "" Keep undo history across sessions by storing it in a file
 
 if has('persistent_undo')
-  let vim_dir = '$HOME/.config/nvim'
+  "let vim_dir = '$HOME/.config/nvim'
+  let vim_dir = '$HOME/.vim'
   "let &runtimepath.=','.vim_dir
   let undo_dir = expand(vim_dir.'/undo')
   call system('mkdir ' . vim_dir)
@@ -237,6 +290,32 @@ set completeopt-=preview
 cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev X x
+
+"}}}
+"{{{ Keys
+nnoremap <leader>c :!$HOME/bin/ctags -R --fields=+l --exclude=.git/* --exclude=log/* --exclude=tmp/* --exclude=*.json --exclude=*.robot --exclude=*.py -f $HOME/workspace/sources/tags $HOME/workspace/sources/* <CR><CR>
+
+" Remove COLOR codes
+nnoremap <leader>t :%s!\e[[0-9;]\+[mK]!!g<CR>
+
+" Remove search highlight and refresh
+nnoremap <silent> <C-l> :nohl<CR>:syn sync fromstart<CR><C-l>
+
+" Remove trailing whitespace
+function! <SID>StripTrailingWhitespaces()
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Do the business:
+    %s/\s\+$//e
+    " Clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction
+command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
+
+nnoremap <leader>l :StripTrailingWhitespaces<CR>
 
 "}}}
 "{{{ Autoreload vim on changes made
