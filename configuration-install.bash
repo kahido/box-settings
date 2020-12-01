@@ -1,6 +1,10 @@
 #!/bin/bash
 
-# FISH configuration
+# ZSH Shell configuration
+rm -f $HOME/.zshrc
+ln -s `pwd`/zshrc $HOME/.zshrc
+
+# FISH Shell configuration
 #rm -f $HOME/.config/fish/functions/fish_prompt.fish
 #ln -s `pwd`/fish_prompt.fish $HOME/.config/fish/functions/fish_prompt.fish
 
